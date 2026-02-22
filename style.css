@@ -1,0 +1,449 @@
+/* style.css */
+
+/* RESET */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f0f2f5;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+}
+
+/* MAIN APP LAYOUT */
+.app {
+    display: flex;
+    flex-direction: column;
+    max-width: 1200px;
+    width: 100%;
+}
+
+.controls {
+    background: #fff;
+    padding: 10px;
+    border-radius: 12px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+}
+
+.spacer {
+    height: 0;
+}
+
+/* BUTTONS */
+.btn {
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    color: #fff;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+}
+
+.btn-green {
+    background: #28a745;
+}
+
+.btn-red {
+    background: #dc3545;
+}
+
+.btn-orange {
+    background: #fd7e14;
+}
+
+.btn-purple {
+    background: #6f42c1;
+}
+
+.btn-yellow {
+    background: #ffc107;
+    color: #000;
+}
+
+.btn-blue {
+    background: #007bff;
+}
+
+.btn-dark {
+    background: #343a40;
+}
+
+/* DARK MODE */
+body.dark-mode {
+    background: #1e1e1e;
+    color: #ddd;
+}
+
+body.dark-mode .controls,
+body.dark-mode .main {
+    background: #2c2c2c;
+    box-shadow: 0 2px 8px rgba(255, 255, 255, 0.05);
+}
+
+body.dark-mode .btn {
+    opacity: 0.9;
+}
+
+body.dark-mode .btn:hover {
+    opacity: 1;
+}
+
+body.dark-mode #statusPanel {
+    background: rgba(50, 50, 50, 0.9);
+}
+
+/* TOP BAR */
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.title {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+/* MAIN AREA */
+.main {
+    background: #fff;
+    padding: 15px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+#plotWrap {
+    position: relative;
+}
+
+#plot {
+    width: 100%;
+    height: 600px;
+}
+
+/* STATUS PANEL */
+#statusPanel {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 8px 12px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+}
+
+.dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+.online {
+    background: #28a745;
+    box-shadow: 0 0 6px #28a745;
+}
+
+.offline {
+    background: #dc3545;
+    box-shadow: 0 0 6px #dc3545;
+}
+
+#dateTime {
+    margin-left: auto;
+    font-weight: bold;
+}
+
+/* ── AI BUTTON ─────────────────────────────────────────────── */
+.btn-ai {
+    background: linear-gradient(135deg, #00b09b, #96c93d);
+    color: #fff;
+}
+
+.btn-recording {
+    background: linear-gradient(135deg, #e53935, #e35d5b) !important;
+    animation: pulse-record 0.8s infinite alternate;
+}
+
+@keyframes pulse-record {
+    from {
+        box-shadow: 0 0 0 0 rgba(229, 57, 53, 0.6);
+    }
+
+    to {
+        box-shadow: 0 0 0 8px rgba(229, 57, 53, 0);
+    }
+}
+
+/* ── MODAL OVERLAY ─────────────────────────────────────────── */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    backdrop-filter: blur(3px);
+}
+
+.modal-box {
+    background: #fff;
+    border-radius: 16px;
+    width: min(700px, 95vw);
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 20px;
+    background: linear-gradient(135deg, #00b09b, #96c93d);
+    color: #fff;
+    font-size: 17px;
+    font-weight: bold;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.modal-body {
+    padding: 18px 20px;
+    overflow-y: auto;
+    flex: 1;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.modal-body h3 {
+    margin: 14px 0 8px;
+    font-size: 15px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 4px;
+}
+
+.modal-footer {
+    display: flex;
+    gap: 10px;
+    padding: 12px 20px;
+    border-top: 1px solid #eee;
+    justify-content: flex-end;
+}
+
+/* ── AI REPORT CONTENTS ─────────────────────────────────── */
+.ai-timestamp {
+    color: #666;
+    font-size: 13px;
+    margin-bottom: 8px;
+}
+
+.ai-sensor-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.ai-sensor-chip {
+    background: #f0f9f6;
+    border: 1px solid #b2dfdb;
+    border-radius: 8px;
+    padding: 8px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+}
+
+.ai-sensor-chip span {
+    font-size: 12px;
+    color: #555;
+}
+
+.ai-sensor-chip strong {
+    font-size: 18px;
+    color: #00796b;
+}
+
+.ai-sensor-chip small {
+    font-size: 11px;
+    color: #999;
+}
+
+.ai-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 10px;
+}
+
+.ai-table td {
+    padding: 6px 10px;
+    border: 1px solid #e0e0e0;
+}
+
+.ai-table tr:nth-child(even) {
+    background: #f9f9f9;
+}
+
+.ai-findings {
+    padding-left: 18px;
+    margin-bottom: 10px;
+}
+
+.ai-findings li {
+    margin-bottom: 4px;
+}
+
+.ai-alerts {
+    padding-left: 18px;
+    margin-bottom: 10px;
+}
+
+.ai-alerts li {
+    margin-bottom: 6px;
+    font-weight: 500;
+}
+
+.ai-disclaimer {
+    font-size: 12px;
+    color: #888;
+    border-top: 1px dashed #ddd;
+    padding-top: 8px;
+    margin-top: 10px;
+}
+
+/* ── DARK MODE – MODAL ──────────────────────────────────── */
+body.dark-mode .modal-box {
+    background: #2c2c2c;
+    color: #ddd;
+}
+
+body.dark-mode .modal-body h3 {
+    border-color: #444;
+}
+
+body.dark-mode .modal-footer {
+    border-color: #444;
+}
+
+body.dark-mode .ai-sensor-chip {
+    background: #1e3a35;
+    border-color: #004d40;
+}
+
+body.dark-mode .ai-sensor-chip span {
+    color: #aaa;
+}
+
+body.dark-mode .ai-table td {
+    border-color: #444;
+}
+
+body.dark-mode .ai-table tr:nth-child(even) {
+    background: #252525;
+}
+
+body.dark-mode .ai-disclaimer {
+    color: #666;
+    border-color: #444;
+}
+
+/* ── GEMINI LOADING SPINNER ─────────────────────────────── */
+.gemini-loading {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 0;
+    color: #666;
+    font-style: italic;
+}
+
+.ai-spinner {
+    width: 22px;
+    height: 22px;
+    border: 3px solid #b2dfdb;
+    border-top-color: #00796b;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    flex-shrink: 0;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.gemini-reply {
+    background: #f0f9f6;
+    border-left: 4px solid #00b09b;
+    padding: 12px 16px;
+    border-radius: 0 8px 8px 0;
+    line-height: 1.7;
+    margin-bottom: 10px;
+}
+
+body.dark-mode .gemini-reply {
+    background: #1e3a35;
+    border-left-color: #00b09b;
+}
+
+/* ── GEMINI FALLBACK NOTICE ─────────────────────────────── */
+.gemini-fallback-notice {
+    background: #fff8e1;
+    border-left: 4px solid #ffc107;
+    padding: 10px 14px;
+    border-radius: 0 8px 8px 0;
+    margin-bottom: 12px;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.gemini-fallback-notice a {
+    color: #00796b;
+    font-weight: bold;
+}
+
+.gemini-fallback-notice code {
+    font-size: 11px;
+    color: #888;
+}
+
+body.dark-mode .gemini-fallback-notice {
+    background: #332700;
+    border-left-color: #ffc107;
+}

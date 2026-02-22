@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Back Mapping Device</title>
+
+    <link rel="stylesheet" href="style.css" />
+
+    <!-- Plotly for spine chart -->
+    <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+
+    <!-- html2canvas for report screenshots -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <!-- Firebase Compat SDK (no bundler needed) -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-database-compat.js"></script>
+</head>
+
+<body>
+    <div class="app">
+
+        <!-- ── CONTROLS ── -->
+        <div class="controls">
+            <div class="top-bar">
+                <span class="title">Back Mapping Device</span>
+                <button id="darkModeBtn" class="btn btn-dark">🌙 Dark Mode</button>
+            </div>
+            <div class="grid">
+                <button id="startBtn" class="btn btn-green">▶ Start Demo</button>
+                <button id="stopBtn" class="btn btn-red">⏹ Stop Demo</button>
+                <button id="measToggleBtn" class="btn btn-orange">📏 Measurements</button>
+                <button id="showAnglesBtn" class="btn btn-purple">📐 Angles</button>
+                <button id="reportBtn" class="btn btn-yellow">🖼 Report Image</button>
+                <button id="toggleLabelsBtn" class="btn btn-blue">🏷 Sensor Labels</button>
+                <button id="aiBtn" class="btn btn-ai">🤖 AI Analysis</button>
+            </div>
+        </div>
+
+        <!-- ── AI REPORT MODAL ── -->
+        <div id="aiModal" class="modal-overlay" style="display:none;">
+            <div class="modal-box">
+                <div class="modal-header">
+                    <span>🤖 AI Spinal Analysis Report</span>
+                    <button id="aiModalClose" class="modal-close">✕</button>
+                </div>
+                <div id="aiModalBody" class="modal-body"></div>
+                <div class="modal-footer">
+                    <button id="aiModalSave" class="btn btn-green">💾 Save Report</button>
+                    <button id="aiModalClose2" class="btn btn-red">Close</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── MAIN PLOT ── -->
+        <div class="main">
+            <div id="plotWrap">
+
+                <!-- Status bar (top-left overlay) -->
+                <div id="statusPanel">
+                    <div id="onlineDot" class="dot offline"></div>
+                    <div id="statusText">Offline</div>
+                    <div id="firebaseBadge" class="badge">🔥 Firebase</div>
+                    <div id="dateTime"></div>
+                </div>
+
+                <div id="plot" aria-label="Back mapping spine plot"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <audio id="clickSound" src="click.mp3" preload="auto"></audio>
+    <script src="script.js"></script>
+</body>
+
+</html>
