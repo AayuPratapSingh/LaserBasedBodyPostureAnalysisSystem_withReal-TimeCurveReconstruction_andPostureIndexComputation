@@ -166,9 +166,16 @@ function updatePlot() {
     const isDark = document.body.classList.contains("dark-mode");
     const yAxis = labelsVisible ? sensorLabels : sensorLabels.map((_, i) => i + 1);
 
-    // Dynamic x-axis: max sensor value + 5% padding (min 100 so empty chart isn't flat)
+    // ── Manual axis range (reads the input fields) ──────────────────
+    const xMinIn = parseFloat(document.getElementById('xMin').value);
+    const xMaxIn = parseFloat(document.getElementById('xMax').value);
+    const yMinIn = parseInt(document.getElementById('yMin').value);
+    const yMaxIn = parseInt(document.getElementById('yMax').value);
+
+    // Dynamic x-axis: max sensor value + 5% padding (min 10 so empty chart isn't flat)
     const rawMax = Math.max(...sensorData);
-    const xMax = rawMax > 0 ? Math.ceil(rawMax * 1.05) : 100;
+    const xMax = !isNaN(xMaxIn) ? xMaxIn : 60;  // default cap: 60 cm
+    const xMin = !isNaN(xMinIn) ? xMinIn : 0;
 
     const mainTrace = {
         x: sensorData,
@@ -202,13 +209,16 @@ function updatePlot() {
             font: { color: isDark ? "#eee" : "#222", size: 18 }
         },
         yaxis: {
-            autorange: "reversed",
+            autorange: !isNaN(yMinIn) || !isNaN(yMaxIn) ? false : "reversed",
+            range: (!isNaN(yMinIn) || !isNaN(yMaxIn))
+                ? [(!isNaN(yMaxIn) ? yMaxIn - 0.5 : 8.5), (!isNaN(yMinIn) ? yMinIn - 1.5 : -0.5)]
+                : undefined,
             tickfont: { color: isDark ? "#aaa" : "#555" },
             gridcolor: isDark ? "#444" : "#e0e0e0"
         },
         xaxis: {
             title: "Sensor Value (cm)",
-            range: [0, xMax],
+            range: [xMin, xMax],
             tickfont: { color: isDark ? "#aaa" : "#555" },
             gridcolor: isDark ? "#444" : "#e0e0e0"
         },
@@ -577,3 +587,18 @@ aiBtn.addEventListener("click", startAiRecording);
 // ═══════════════════════════════════════════════════════════════
 updatePlot();      // render empty chart immediately
 connectFirebase(); // start listening to Firebase live data
+
+// ── Axis scale controls ──────────────────────────────────────
+document.getElementById('applyAxisBtn').addEventListener('click', () => {
+    playClick();
+    updatePlot();
+});
+
+document.getElementById('resetAxisBtn').addEventListener('click', () => {
+    playClick();
+    document.getElementById('xMin').value = '';
+    document.getElementById('xMax').value = '';
+    document.getElementById('yMin').value = '';
+    document.getElementById('yMax').value = '';
+    updatePlot();
+});

@@ -39,6 +39,16 @@
                 <button id="toggleLabelsBtn" class="btn btn-blue">🏷 Sensor Labels</button>
                 <button id="aiBtn" class="btn btn-ai">🤖 AI Analysis</button>
             </div>
+
+            <!-- ── AXIS SCALE CONTROLS ── -->
+            <div class="axis-controls">
+                <label>X Min <input type="number" id="xMin" placeholder="auto" step="1"></label>
+                <label>X Max <input type="number" id="xMax" placeholder="auto" step="1"></label>
+                <label>Y Start (1–8) <input type="number" id="yMin" placeholder="auto" step="1" min="1" max="8"></label>
+                <label>Y End (1–8) <input type="number" id="yMax" placeholder="auto" step="1" min="1" max="8"></label>
+                <button id="applyAxisBtn" class="btn btn-blue">⚙ Apply</button>
+                <button id="resetAxisBtn" class="btn btn-red">↺ Reset</button>
+            </div>
         </div>
 
         <!-- ── AI REPORT MODAL ── -->
