@@ -114,7 +114,7 @@ const LIDAR_MAX = 65535; // out-of-range sentinel value
 
 function sanitize(v) {
     const n = Number(v);
-    return (isNaN(n) || n === LIDAR_MAX) ? 0 : n;
+    return (isNaN(n) || n === LIDAR_MAX) ? 0 : n / 10;  // convert mm → cm
 }
 
 function parseSensorPayload(val) {
@@ -207,7 +207,7 @@ function updatePlot() {
             gridcolor: isDark ? "#444" : "#e0e0e0"
         },
         xaxis: {
-            title: "Sensor Value (mm)",
+            title: "Sensor Value (cm)",
             range: [0, xMax],
             tickfont: { color: isDark ? "#aaa" : "#555" },
             gridcolor: isDark ? "#444" : "#e0e0e0"
@@ -386,7 +386,7 @@ async function runAiAnalysis(snapshots) {
     aiModalBody.innerHTML = `
       <p class="ai-timestamp">📅 Recorded: ${ts} &nbsp;|&nbsp; 📊 ${n} snapshots</p>
 
-      <h3>📋 Sensor Averages (mm)</h3>
+      <h3>📋 Sensor Averages (cm)</h3>
       <div class="ai-sensor-grid">
         ${avg.map((v, i) => `
           <div class="ai-sensor-chip">
@@ -398,8 +398,8 @@ async function runAiAnalysis(snapshots) {
 
       <h3>📐 Key Metrics</h3>
       <table class="ai-table">
-        <tr><td>Spinal Range</td>        <td><b>${range.toFixed(0)} mm</b></td></tr>
-        <tr><td>Upper/Lower Offset</td>  <td><b>${asymmetry.toFixed(0)} mm</b></td></tr>
+        <tr><td>Spinal Range</td>        <td><b>${range.toFixed(1)} cm</b></td></tr>
+        <tr><td>Upper/Lower Offset</td>  <td><b>${asymmetry.toFixed(1)} cm</b></td></tr>
         <tr><td>Max Cobb-like Angle</td> <td><b>~${cobbMax.toFixed(1)}°</b></td></tr>
         <tr><td>Reading Stability</td>   <td><b>${stability}</b></td></tr>
       </table>
@@ -414,19 +414,19 @@ async function runAiAnalysis(snapshots) {
 
     // Build prompt
     const sensorSummary = avg.map((v, i) =>
-        `${sensorLabels[i]} (${["Cervical top", "Cervical", "Upper Thoracic", "Mid Thoracic", "Lower Thoracic", "Upper Lumbar", "Lower Lumbar", "Sacral"][i]}): ${v.toFixed(0)} mm ±${sd[i].toFixed(0)}`
+        `${sensorLabels[i]} (${["Cervical top", "Cervical", "Upper Thoracic", "Mid Thoracic", "Lower Thoracic", "Upper Lumbar", "Lower Lumbar", "Sacral"][i]}): ${v.toFixed(1)} cm ±${sd[i].toFixed(1)}`
     ).join("\n");
 
     const prompt = `You are a clinical spinal analysis assistant helping a doctor interpret back mapping data from a LiDAR-based device.
 
-The device has 8 sensors placed vertically along the spine from top to bottom. Each sensor measures the distance (in mm) from the sensor to the patient's back surface. A larger value means the surface is further away (more concave). 
+The device has 8 sensors placed vertically along the spine from top to bottom. Each sensor measures the distance (in cm) from the sensor to the patient's back surface. A larger value means the surface is further away (more concave). 
 
 Recorded data (averages over ${n} samples, ${RECORD_SEC} seconds):
 ${sensorSummary}
 
 Computed metrics:
-- Spinal lateral range (max-min): ${range.toFixed(0)} mm
-- Upper vs Lower spine offset: ${asymmetry.toFixed(0)} mm
+- Spinal lateral range (max-min): ${range.toFixed(1)} cm
+- Upper vs Lower spine offset: ${asymmetry.toFixed(1)} cm
 - Estimated maximum Cobb-like angle: ~${cobbMax.toFixed(1)}°
 - Reading stability: ${stability} (based on sensor std deviation)
 
@@ -467,16 +467,16 @@ Write in clear, concise medical language suitable for a doctor's report. Keep it
         // ── Rule-based fallback ──────────────────────────────────────
         const findings = [], alerts = [];
 
-        if (range > 800) {
+        if (range > 80) {
             findings.push("Significant curvature detected along spinal axis.");
             alerts.push("⚠️ High lateral deviation — consider further clinical assessment.");
-        } else if (range > 400) {
+        } else if (range > 40) {
             findings.push("Moderate curvature detected.");
             alerts.push("ℹ️ Moderate deviation — monitor regularly.");
         } else {
             findings.push("Spine curve within normal variation range.");
         }
-        if (asymmetry > 300) {
+        if (asymmetry > 30) {
             findings.push("Notable upper-to-lower spinal asymmetry.");
             alerts.push("⚠️ Upper/lower asymmetry detected — check for scoliosis signs.");
         }
@@ -511,7 +511,7 @@ function showAiReport(r) {
     aiModalBody.innerHTML = `
       <p class="ai-timestamp">📅 Recorded: ${ts} &nbsp;|&nbsp; 📊 ${r.n} snapshots</p>
 
-      <h3>📋 Sensor Averages (mm)</h3>
+      <h3>📋 Sensor Averages (cm)</h3>
       <div class="ai-sensor-grid">
         ${r.avg.map((v, i) => `
           <div class="ai-sensor-chip">
@@ -523,8 +523,8 @@ function showAiReport(r) {
 
       <h3>📐 Key Metrics</h3>
       <table class="ai-table">
-        <tr><td>Spinal Range</td>     <td><b>${r.range.toFixed(0)} mm</b></td></tr>
-        <tr><td>Upper/Lower Offset</td><td><b>${r.asymmetry.toFixed(0)} mm</b></td></tr>
+        <tr><td>Spinal Range</td>     <td><b>${r.range.toFixed(1)} cm</b></td></tr>
+        <tr><td>Upper/Lower Offset</td><td><b>${r.asymmetry.toFixed(1)} cm</b></td></tr>
         <tr><td>Max Cobb-like Angle</td><td><b>~${r.cobbMax.toFixed(1)}°</b></td></tr>
         <tr><td>Reading Stability</td> <td><b>${r.stability}</b></td></tr>
       </table>
